@@ -69,6 +69,7 @@ namespace SparkleShare {
 
             StartSSH ();
             SparkleLib.Git.SparkleGit.SSHPath = Path.Combine (msysgit_path, "bin", "ssh.exe");
+            SparkleLib.Git.SparkleGitLfs.GitLfsPath = Path.Combine(msysgit_path, "bin", "git-lfs.exe");
 
             base.Initialize ();
         }
