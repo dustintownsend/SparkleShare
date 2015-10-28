@@ -29,6 +29,7 @@ namespace SparkleLib.Git {
 
         private SparkleGit git;
         private bool use_git_bin;
+        private bool use_git_lfs;
         private string cached_salt;
 
         private Regex progress_regex = new Regex (@"([0-9]+)%", RegexOptions.Compiled);
@@ -103,6 +104,7 @@ namespace SparkleLib.Git {
                 }
 
                 this.use_git_bin = false; // TODO
+                this.use_git_lfs = true;
             }
 
             RemoteUrl = uri;
@@ -384,6 +386,9 @@ namespace SparkleLib.Git {
 
             if (this.use_git_bin)
                 InstallGitBinConfiguration ();
+
+            if (this.use_git_lfs)
+                InstallGitLfsConfiguration();
         }
 
 
@@ -399,6 +404,11 @@ namespace SparkleLib.Git {
                 SparkleGit git_config = new SparkleGit (TargetFolder, "config " + setting);
                 git_config.StartAndWaitForExit ();
             }
+        }
+
+        public void InstallGitLfsConfiguration()
+        {
+
         }
 
 
@@ -425,23 +435,29 @@ namespace SparkleLib.Git {
             if (this.use_git_bin) {
                 writer.WriteLine ("* filter=bin binary");
 
-            } else {
+            }
+            else if (this.use_git_lfs)
+            {
+
+            }
+            else {
                 // Compile a list of files we don't want Git to compress.
                 // Not compressing already compressed files decreases memory usage and increases speed
-                string [] extensions = new string [] {
+                string[] extensions = new string[] {
                     "jpg", "jpeg", "png", "tiff", "gif", // Images
                     "flac", "mp3", "ogg", "oga", // Audio
                     "avi", "mov", "mpg", "mpeg", "mkv", "ogv", "ogx", "webm", // Video
                     "zip", "gz", "bz", "bz2", "rpm", "deb", "tgz", "rar", "ace", "7z", "pak", "tc", "iso", ".dmg" // Archives
                 };
 
-                foreach (string extension in extensions) {
-                    writer.WriteLine ("*." + extension + " -delta");
-                    writer.WriteLine ("*." + extension.ToUpper () + " -delta");
+                foreach (string extension in extensions)
+                {
+                    writer.WriteLine("*." + extension + " -delta");
+                    writer.WriteLine("*." + extension.ToUpper() + " -delta");
                 }
 
-                writer.WriteLine ("*.txt text");
-                writer.WriteLine ("*.TXT text");
+                writer.WriteLine("*.txt text");
+                writer.WriteLine("*.TXT text");
             }
 
             writer.Close ();
