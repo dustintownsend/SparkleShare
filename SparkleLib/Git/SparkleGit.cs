@@ -150,17 +150,23 @@ namespace SparkleLib.Git {
 
 
         public SparkleGitBin (string path, string args) : base (path, args)
-        {
-            if (string.IsNullOrEmpty (GitBinPath))
-                GitBinPath = LocateCommand ("git-bin");
+    public class SparkleGitLfs : SparkleProcess
+    {
+        public static string GitLfsPath;
 
-            EnableRaisingEvents              = true;
-            StartInfo.FileName               = GitBinPath;
+        public SparkleGitLfs(string path, string args)
+            : base(path, args)
+        {
+            if (string.IsNullOrEmpty(GitLfsPath))
+                GitLfsPath = LocateCommand("git-lfs");
+
+            EnableRaisingEvents = true;
+            StartInfo.FileName = GitLfsPath;
             StartInfo.RedirectStandardOutput = true;
-            StartInfo.UseShellExecute        = false;
-            StartInfo.WorkingDirectory       = path;
-            StartInfo.CreateNoWindow         = true;
-            StartInfo.Arguments              = args;
+            StartInfo.UseShellExecute = false;
+            StartInfo.WorkingDirectory = path;
+            StartInfo.CreateNoWindow = true;
+            StartInfo.Arguments = args;
         }
     }
 }
